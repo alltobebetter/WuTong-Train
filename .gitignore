@@ -5,13 +5,9 @@ __pycache__/
 .venv/
 venv/
 
-# 数据文件
-# data_raw/ 保留在仓库中，Kaggle 直接使用
+# 数据（data_raw/ 保留在仓库，Kaggle 直接使用）
 data_staging/
-data/raw/
-data/staging/
-data/external/
-data/downloads/
+data/
 
 # 模型产物
 models/
@@ -30,4 +26,3 @@ Thumbs.db
 
 # 日志
 *.log
-v5.txt
