@@ -24,5 +24,6 @@ Thumbs.db
 # Jupyter
 .ipynb_checkpoints/
 
-# 日志
+# 文档 / 日志
+docs/
 *.log
