@@ -5,11 +5,10 @@ __pycache__/
 .venv/
 venv/
 
-# 数据文件（不提交原始数据，合规要求）
-data_raw/
+# 数据文件
+# data_raw/ 保留在仓库中，Kaggle 直接使用
 data_staging/
-data/raw/*.xlsx
-data/raw/*.csv
+data/raw/
 data/staging/
 data/external/
 data/downloads/
