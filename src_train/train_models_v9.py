@@ -1123,6 +1123,18 @@ def train(
             pickle.dump(router, f)
 
     # ── 19. manifest ─────────────────────────────────
+    # numpy 类型转 Python 原生类型，避免 JSON 序列化失败
+    def _to_native(obj):
+        if isinstance(obj, (np.integer,)):
+            return int(obj)
+        if isinstance(obj, (np.floating,)):
+            return float(obj)
+        if isinstance(obj, (np.bool_,)):
+            return bool(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return obj
+
     manifest = {
         "version": version,
         "trained_at": datetime.now(timezone.utc).isoformat(),
@@ -1157,8 +1169,8 @@ def train(
             "lightgbm": lgb_params if lgb_params else "default",
         },
         "adversarial_validation": {
-            "auc": round(adv_auc, 4),
-            "distribution_shift": adv_auc > 0.75,
+            "auc": round(float(adv_auc), 4),
+            "distribution_shift": bool(adv_auc > 0.75),
         },
         "metrics": {
             "xgboost": {
@@ -1191,7 +1203,7 @@ def train(
     }
 
     with open(out_dir / "manifest.json", "w", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, indent=2)
+        json.dump(manifest, f, ensure_ascii=False, indent=2, default=_to_native)
     with open(out_dir / "feature_list.json", "w", encoding="utf-8") as f:
         json.dump(all_features, f, ensure_ascii=False, indent=2)
     with open(out_dir / "classification_report.txt", "w", encoding="utf-8") as f:

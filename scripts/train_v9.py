@@ -78,7 +78,7 @@ def main():
     print(f"Stacking: {'是' if not args.no_stacking else '否'}")
     print(f"SMOTE-ENN: {'是' if not args.no_smote else '否'}")
     print(f"Optuna: {'是 (' + str(args.optuna_trials) + ' trials)' if not args.no_optuna else '否'}")
-    print(f"混淆对专家: {'是 (threshold={args.confidence_threshold})' if not args.no_experts else '否'}")
+    print(f"混淆对专家: {'是 (threshold=' + str(args.confidence_threshold) + ')' if not args.no_experts else '否'}")
     print(f"对抗验证: {'是' if not args.no_adversarial else '否'}")
     print(f"外部数据集: {'受控混入' if external_dir else '否'}")
 
