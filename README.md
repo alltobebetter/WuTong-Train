@@ -7,8 +7,9 @@
 | 版本 | 准确率 | F1 | 方法 |
 |------|--------|-----|------|
 | V6 | 98.55% | 0.9856 | XGBoost + CatBoost + LightGBM Stacking |
-| **V7** | **99.35%** | **0.9935** | Optuna 调参 + 交互特征 + 4 模型 Stacking |
+| V7 | 99.35% | 0.9935 | Optuna 调参 + 交互特征 + 4 模型 Stacking |
 | V8 | 99.23% | 0.9923 | V7 基础上增加特征选择 + 多种子集成 |
+| **V9** | **TBD** | **TBD** | V7 基础 + 混淆对专家 + 置信度路由 + 对抗验证 |
 
 ## 支持的攻击类型
 
@@ -49,16 +50,18 @@ legacy/          历史版本归档（V1–V5）
 pip install -r requirements.txt
 python scripts/ingest.py           # 原始数据 → data/staging/
 python scripts/augment_data.py     # 数据增强（可选）
-python scripts/train_v7.py         # 训练最优模型 V7
+python scripts/train_v9.py         # 训练最新模型 V9
 ```
 
 模型产物输出到 `models/` 目录。
 
 ## 技术方案
 
-- **特征工程**：49 维特征（25 基础 + 13 高级 + 11 交互），针对 CSRF / 正常访问混淆做了专项特征
+- **特征工程**：54 维特征（25 基础 + 13 高级 + 11 交互 + 5 精准区分），针对 CSRF / 正常访问混淆做了专项特征
 - **集成学习**：XGBoost + CatBoost + LightGBM + ExtraTrees → StackingClassifier（GradientBoosting 作为 meta-learner）
+- **混淆对专家**：针对 top-5 混淆对训练专门的二分类器，低置信样本交给专家判断
 - **超参搜索**：Optuna 贝叶斯优化，每模型 30 trials
+- **对抗验证**：自动检测训练/测试分布偏移，调整样本权重
 - **数据均衡**：SMOTE-ENN 过采样 + 清洗
 - **外部数据**：CSIC 2010 受控混入，仅补充少数类
 
